@@ -21,6 +21,6 @@ async function bootstrap() {
   app.enableShutdownHooks()
   await app.listen();
 
-  logger.log(`Catalog microservices (TCP) listening on port ${PORT}`);
+  logger.log(`Media microservices (TCP) listening on port ${PORT}`);
 }
 bootstrap();
