@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { SearchModule } from './search.module';
 import { Logger } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { MediaModule } from '../../media/src/media.module';
 
 async function bootstrap() {
   process.title = 'search';
@@ -10,7 +9,7 @@ async function bootstrap() {
   const PORT = Number(process.env.SEARCH_TCP_PORT ?? 4012)
 
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    MediaModule,
+    SearchModule,
     {
       transport: Transport.TCP,
       options: {
