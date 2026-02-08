@@ -6,21 +6,26 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 async function bootstrap() {
   process.title = 'search';
   const logger = new Logger('SearchBootstrap');
-  const PORT = Number(process.env.SEARCH_TCP_PORT ?? 4012)
+
+  const rmqUrl = process.env.RABBITMQ_URL ?? "amqp://localhost:5672"
+  const queue = process.env.SEARCH_QUEUE;
 
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     SearchModule,
     {
-      transport: Transport.TCP,
+      transport: Transport.RMQ,
       options: {
-        host: '0.0.0.0',
-        port: PORT
+        urls: [rmqUrl],
+        queue,
+        queueOptions: {
+          durable: false
+        }
       }
     }
   )
   app.enableShutdownHooks()
   await app.listen();
 
-  logger.log(`Search microservices (TCP) listening on port ${PORT}`);
+  logger.log(`Search microservices (RMQ) listening on queue ${queue} via ${rmqUrl}`);
 }
 bootstrap();
